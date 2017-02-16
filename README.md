@@ -1,4 +1,4 @@
 
 常用demo
 
-* 锤子手机banner
+* 锤子手机banner特效
