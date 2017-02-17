@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>抽奖</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
+            text-decoration: none;
+            border: 0;
+        }
+
+        .box {
+            width: 450px;
+            height: 500px;
+            border: 1px solid #000;
+            margin: 150px auto;
+            text-align: center;
+        }
+
+        .box li {
+            float: left;
+            width: 150px;
+            height: 150px;
+            border: 1px solid #000;
+            box-sizing: border-box;
+        }
+
+        .box li img {
+            width: 100%;
+            height: 100%;
+        }
+
+        #btn {
+            margin-top: 5px;
+            width: 120px;
+            height: 40px;
+            border: 3px solid peru;
+
+        }
+
+        .cur {
+            border: 3px solid red !important;
+        }
+
+    </style>
+    <script src="js/jquery-3.1.1.js"></script>
+    <script>
+        $(function () {
+            var imgArray = [
+                {src:'images/luck/01.jpg',title:'iPhone手机'},
+                {src:'images/luck/02.jpg',title:'黄金'},
+                {src:'images/luck/03.jpg',title:'beats耳机'},
+                {src:'images/luck/04.jpg',title:'iWatch'},
+                {src:'images/luck/05.jpg',title:'感谢参与'},
+                {src:'images/luck/06.jpg',title:'MacBook'},
+                {src:'images/luck/07.jpg',title:'布娃娃'},
+                {src:'images/luck/08.jpg',title:'机械键盘'},
+                {src:'images/luck/09.jpg',title:'洗衣机'},
+            ];
+
+            var newLi = null, newImg = null;
+            creationData(imgArray);
+
+            var timer = null,loop = 0;
+            $('#btn').click(function (){
+                clearInterval(timer);
+                // 随机数
+                var num = parseInt(Math.random()*50) || 9;
+
+                if($(this).text()=='点击抽奖') {
+                  timer = setInterval(autoPlay, 100);
+                    function autoPlay(){
+
+                        if (num == 0) {
+                            clearInterval(timer);
+                            $('#btn').text('再来一次')
+                            var test=( $('li').eq(loop-1).children('img').attr('alt'));
+                            $('li').eq(loop-1).children('img').fadeOut(1000).fadeIn(1000);
+                            loop = 0;
+                            if(test != '感谢参与'){
+                                alert('恭喜获得'+test)
+                            }
+
+                            return;
+                        }
+                        if (loop > 8) {
+                            loop = 0;
+                        }
+                        $('li').eq(loop).addClass('cur').siblings().removeClass('cur');
+                        num--;
+                        loop++;
+                    }
+
+                } else if ($(this).text() == '再来一次'){
+               //   在来一次  刷新数据 重新排列
+                    // 删除之前的数据
+                    $('#btn').text('点击抽奖')
+                         $("ul").empty();
+                        var newImagArray = shuffle(imgArray);
+                        creationData(newImagArray);
+                }
+            })
+
+
+
+            //创建数据
+            function creationData(Array) {
+                $.each(Array, function (index, value) {
+                    newLi = $('<li></li>');
+                    newImg = $('<img></img');
+                    $('ul').append(newLi);
+                    newLi.append(newImg);
+                    newImg.attr({
+                        'src': imgArray[index].src,
+                        'alt': imgArray[index].title
+                    })
+                })
+            }
+            // 随机排列数组
+            function shuffle(input){
+                for(var i = input.length-1;i>=0;i--)
+                {
+                    var randomIndex = Math.floor(Math.random()*(i+1));
+                    var itemAtIndex = input[randomIndex];
+
+                    input[randomIndex] = input[i];
+                    input[i] = itemAtIndex;
+                }
+                return input;
+            }
+        })
+    </script>
+</head>
+<body>
+<div class="box">
+    <ul>
+    </ul>
+    <button id="btn">点击抽奖</button>
+</div>
+</body>
+</html>
