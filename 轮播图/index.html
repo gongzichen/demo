@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>轮播图</title>
+    <link rel="stylesheet" href="animate.min.css">
+    <style>
+        *{
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            vertical-align: top;
+        }
+        .box {
+            width: 724px;
+            height: 308px;
+            margin: 100px auto;
+        }
+
+       .box>ul {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .box>ul>li{
+            position: absolute;
+            top:0;
+            left:0;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <ul class="boxUl">
+            <li style="z-index:1;"  class="">
+                  <a href="#"><img src="img/281298502325.jpg" alt="7.2PTR钓鱼神器隐藏外观及配色" />
+                  </a>
+            </li>
+            <li  class=" ">
+                <a href=""><img src="img/281212074189.jpg" alt="洞窟Breathing作品 伊利丹直捣萨格拉斯之墓"  /></a>
+            </li>
+            <li  class="">
+                <a href="javascript:;"><img src="img/281127465110.jpg" alt="十字作品：情人节邪能玫瑰 不要问代价是神马"/></a></li>
+            <li  class=" ">
+                <a href="javascript:;"><img src="img/281041573394.jpg" alt="幻化区情人节活动 秀恩爱VS.FFF 玩偶徽章任你拿" /></a></li>
+            <li  class="">
+                <a href="javascript:;"><img src="img/280708639429.jpg" alt="国外玩家使用手柄操作恶魔猎手" /></a></li>
+            <li  class=" "><a href="javascript:;"><img src="img/280957124339.jpg" alt="眼都绿了！7.2萨格拉斯之墓最终boss场景预览" /></a></li>
+            <li class=" "><a href="javascript:;"><img src="img/280609896341.jpg" alt="满满童年的回忆 龙珠系列魔兽幻化cosplay大合集" /></a></li>
+            <li  class=" "><a href="javascript:;"><img src="img/280699130591.jpg" alt="7.2PTR燃烧军团突袭破碎群岛 击退恶魔保卫艾泽拉斯"  /></a></li>
+        </ul>
+    </div>
+    <script src="wow.min.js"></script>
+    <script>
+        window.onload = function(){
+            var zIndex = 0;
+            var boxUl = document.getElementsByClassName('boxUl')[0];
+            var boxLis = boxUl.getElementsByTagName('li');
+            var index= 0,timer = null;
+            timer = setInterval(function(){
+                index++;
+                zIndex++;
+                next();
+            },2000)
+            function next(){
+
+                if(index >= 7){
+                    index = 0;
+                }
+                boxLis[index].style.zIndex = zIndex;
+            }
+        }
+        function test(){
+        }
+    </script>
+</body>
+</html>

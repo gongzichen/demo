@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            list-style: none;
+            padding: 0;
+            margin: 0;
+
+        }
+        .box {
+            width: 700px;
+            height: 300px;
+            margin: 100px auto;
+            position: relative;
+            background: red;
+            overflow: hidden;
+        }
+
+        .boxUl {
+            width: 1000%;
+            position: absolute;
+            left:0;
+            top:0;
+        }
+
+
+        .boxUl>li{
+            float: left;
+            width: 700px;
+            height: 300px;
+            box-sizing: border-box;
+        }
+
+        .boxUl li img {
+            width: 100%;
+            height: 100%;
+        }
+
+        span {
+            position: absolute;
+            width: 40px;
+            height: 30px;
+            top: 50%;
+            margin-top: -15px;
+            background: #ccc;
+            left: 0;
+            font-size: 20px;
+            text-align: center;
+            line-height: 30px;
+            cursor: pointer;
+            /*z-index: 15;*/
+        }
+
+        .right {
+            right: 0;
+            left: auto;
+            z-index: 15;
+        }
+        /*圆点*/
+        .test {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            overflow: hidden;
+        }
+        .curr {
+            float: left;
+            width: 20px;
+            height: 20px;
+            background: skyblue;
+            margin-left: 10px;
+            line-height: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .tinct {
+            float: left;
+            width: 20px;
+            height: 20px;
+            background: red;
+            margin-left: 10px;
+            line-height: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <ul class="boxUl">
+        <li class="">
+            <a href="#"><img src="img/281298502325.jpg" alt="7.2PTR钓鱼神器隐藏外观及配色" />
+            </a>
+        </li>
+        <li  class=" ">
+            <a href=""><img src="img/281212074189.jpg" alt="洞窟Breathing作品 伊利丹直捣萨格拉斯之墓"  /></a>
+        </li>
+        <li  class="">
+            <a href="javascript:;"><img src="img/281127465110.jpg" alt="十字作品：情人节邪能玫瑰 不要问代价是神马"/></a></li>
+        <li  class=" ">
+            <a href="javascript:;"><img src="img/281041573394.jpg" alt="幻化区情人节活动 秀恩爱VS.FFF 玩偶徽章任你拿" /></a></li>
+        <li  class="">
+            <a href="javascript:;"><img src="img/280708639429.jpg" alt="国外玩家使用手柄操作恶魔猎手" /></a></li>
+        <li  class=" "><a href="javascript:;"><img src="img/280957124339.jpg" alt="眼都绿了！7.2萨格拉斯之墓最终boss场景预览" /></a></li>
+        <li class=" "><a href="javascript:;"><img src="img/280609896341.jpg" alt="满满童年的回忆 龙珠系列魔兽幻化cosplay大合集" /></a></li>
+        <li  class=" "><a href="javascript:;"><img src="img/280699130591.jpg" alt="7.2PTR燃烧军团突袭破碎群岛 击退恶魔保卫艾泽拉斯"  /></a></li>
+
+        <li  class="">
+            <a href="#"><img src="img/281298502325.jpg" alt="7.2PTR钓鱼神器隐藏外观及配色" />
+            </a>
+        </li>
+
+    </ul>
+    <span id="leftBtn">&lt;</span>
+    <span class="right" id="rightBtn">&gt;</span>
+</div>
+<script>
+    window.onload = function() {
+        var box = document.getElementsByClassName('box')[0];
+        var newUl = document.createElement('ul');
+        newUl.className ='test';
+        box.appendChild(newUl);
+
+        var leftBtn = document.getElementById('leftBtn');
+        var rightBtn = document.getElementById('rightBtn');
+        var boxul = document.getElementsByClassName('boxUl')[0];
+        var boxUlLs = newUl.children;
+        var allLis = boxul.getElementsByTagName('li');
+        //动态的创建
+        var newli;
+        //   页码  位置     节流       定时器
+        var loop = 0, num = 0, test = 0, timer = null;
+        /*遍历*/
+        for (var i = 0; i < allLis.length - 1; i++) {
+            newli = document.createElement('li');
+            newli.innerHTML = i + 1;
+            newli.index = i;
+            newUl.appendChild(newli);
+            if (i == 0) {
+                newli.className = 'tinct';
+            } else {
+                newli.className = 'curr';
+            }
+            //每一个li的点击运动
+            newli.onclick = function () {
+                loop = this.index;
+                boxul.style.left = (-loop * 700) + 'px';
+                // 记录当前的位置
+                num = (-loop * 700);
+                exclude(boxUlLs, loop);
+            }
+        }
+
+        leftBtn.onclick = function () {
+            test++;
+            //函数节流
+            if (test == 1) {
+                clearInterval(timer);
+                loop++;
+                if (loop > 8) {
+                    loop = 1;
+                    num = 0;
+                }
+
+                timer = setInterval(function () {
+                    num -= 30;
+                    if (num <= -700 * loop) {
+                        num = -700*loop;
+                        test = 0;
+                        clearInterval(timer);
+                        exclude(boxUlLs, loop);
+
+                    }
+                    boxul.style.left = num + 'px';
+                }, 30)
+
+            }
+        }
+
+        rightBtn.onclick = function () {
+            test++;
+            if (test == 1) {
+                clearInterval(timer);
+                loop--;
+                if (loop < 0) {
+                    loop = 7;
+                    num = 8 * -700;
+                }
+                timer = setInterval(function () {
+                    num += 30;
+                    if (num >= -700 * loop) {
+                        num= -700*loop;
+                        test = 0;
+                        clearInterval(timer);
+                        exclude(boxUlLs, loop);
+
+                    }
+                    boxul.style.left = num + 'px';
+                }, 30)
+            }
+        }
+    }
+
+
+
+        /*排他*/
+        function exclude(arrayObj,tag) {
+            if (tag == 8) {
+                tag = 0;
+            }
+            console.log(arrayObj+'--------')
+            for (var i = 0; i < arrayObj.length; i++) {
+                arrayObj[i].className = 'curr';
+            }
+
+            arrayObj[tag].className = 'tinct';
+        }
+
+
+</script>
+</body>
+</html>
