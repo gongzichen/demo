@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            border: 0;
+            list-style: none;
+        }
+       ul{
+           width: 600px;
+           height: 300px;
+           border: 1px solid #000;
+           margin: 100px  auto;
+           /*position: relative;*/
+       }
+        li {
+            width: 100px;
+            height: 100px;
+            background: url("img/03.jpg") no-repeat;
+            float: left;
+            /*position: absolute;*/
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+   <ul id="ul">
+       <li></li>
+       <li></li>
+       <li></li>
+       <li></li>
+       <li></li>
+       <li></li>
+       <li></li>
+       <li></li>
+       <li></li>
+       <li></li>
+       <li></li>
+       <li></li>
+       <li></li>
+       <li></li>
+       <li></li>
+       <li></li>
+       <li></li>
+       <li></li>
+   </ul>
+    <script>
+        window.onload = function() {
+                var ul = document.getElementById('ul');
+                var lis = ul.children;
+                var allCols= 6;
+                for(var i=0;i<lis.length;i++)
+                {
+                    lis[i].cols = i % allCols; // 列数
+                    lis[i].rows = parseInt(i / allCols);
+//                    lis[i].style.backgroundPosition = i%test * -100+'px' + row * -100 + 'px';
+                    lis[i].style.backgroundPosition =  lis[i].cols * -100 +'px '+
+                            lis[i].rows * -100 +'px';
+                }
+
+
+               //转场景动画
+            var as = {
+                a0:function(){
+                    for(var i=0;i<lis.length;i++)
+                    {
+                        lis[i].style.left = -600+'px';
+                        lis[i].style.top = -300+'px';
+                        opacity:0;
+
+                        (function(index){
+                            setTimeout(function(){
+                                buffer(allLis[index],{
+
+                                })
+                            },1000)
+                        })(i)
+                    }
+                }
+            }
+        }
+// 缓动动画
+        function buffer(obj,json,fn){
+
+
+
+
+        }
+    </script>
+</body>
+</html>
