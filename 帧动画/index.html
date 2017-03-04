@@ -50,46 +50,138 @@
    </ul>
     <script>
         window.onload = function() {
-                var ul = document.getElementById('ul');
-                var lis = ul.children;
-                var allCols= 6;
-                for(var i=0;i<lis.length;i++)
-                {
+
+          var ul = document.getElementById('ul');
+          var lis = ul.children;
+          var allCols= 6;
+          for(var i=0;i<lis.length;i++){
                     lis[i].cols = i % allCols; // 列数
                     lis[i].rows = parseInt(i / allCols);
-//                    lis[i].style.backgroundPosition = i%test * -100+'px' + row * -100 + 'px';
                     lis[i].style.backgroundPosition =  lis[i].cols * -100 +'px '+
                             lis[i].rows * -100 +'px';
                 }
 
-
-               //转场景动画
+         //转场景动画 -->
             var as = {
-                a0:function(){
-                    for(var i=0;i<lis.length;i++)
-                    {
-                        lis[i].style.left = -600+'px';
-                        lis[i].style.top = -300+'px';
-                        opacity:0;
+            a0: function(){
+                for(var i=0; i<lis.length; i++){
+                    // 2.1 到动画的初始位置去
+                    lis[i].style.left = -600 + 'px';
+                    lis[i].style.top = -300 + 'px';
+                    lis[i].style.opacity = 0;
 
-                        (function(index){
-                            setTimeout(function(){
-                                buffer(allLis[index],{
+                    // 2.2 归位
+                    (function(index){
+                        setTimeout(function(){
+                            buffer(lis[index],{left:0, top:0, opacity:1},null);
+                        }, index * 100);
+                    })(i);
+                }
+            },
 
-                                })
-                            },1000)
-                        })(i)
-                    }
+            // a1: function(){
+            //    for(var i=0; i<lis.length; i++){
+            //         // 2.1 到动画的初始位置去
+            //         lis[i].style.left = 600 + 'px';
+            //         lis[i].style.opacity = 0;
+            //         // 2.2 归位
+            //         (function(index){
+            //             setTimeout(function(){
+            //                 buffer(lis[index],{left:0, opacity:1},null);
+            //             }, lis[index].cols * 100);
+            //         })(i);
+            //     }
+            // },
+
+            a2: function(){
+                for(var i=0; i<lis.length; i++){
+                    // 2.1 到动画的初始位置去
+    
+                    lis[i].style.top = -300 + 'px';
+                    lis[i].style.opacity = 0;
+                    // 2.2 归位
+                    (function(index){
+                        setTimeout(function(){
+                            buffer(lis[index],{top:0, opacity:1},null);
+                        }, index * 100);
+                    })(i);
                 }
             }
-        }
+          };
+           
+          // 3. 连续动画组
+        as.a0();
+        var num = 0;
+        setInterval(function(){
+           num++;
+           num %= 6;
+           as['a'+num]();
+        }, 3000);
+        
+      }
 // 缓动动画
-        function buffer(obj,json,fn){
+ function buffer(obj, json, fn){
+    // 2.1 清除定时器
+    clearInterval(obj.timer);
+    // 2.2 设置定时器
+    var begin = 0, target = 0, speed = 0;
+    obj.timer = setInterval(function(){
+        var flag = true;
+        for(var k in json){
+            if('opacity' == k){
+                begin =getStyleAttr(obj, k) == 
+                0 ? 0: Math.round(parseFloat(getStyleAttr(obj, k))*100) || 100;
+                target = parseInt(json[k]*100);
+            }else if('scrollTop' == k){
+                begin = obj.scrollTop;
+                target = parseInt(json[k]);
+            }else {
+                begin = parseInt(getStyleAttr(obj, k)) || 0;
+                target = parseInt(json[k]);
+            }
 
+            // 2.2.1 计算步长
+            speed = (target - begin) / 20;
+            // 判断
+            speed = (target >= begin) ? Math.ceil(speed) : Math.floor(speed);
 
+            // 2.2.2 动起来
+            if('opacity' == k){ // 设置透明度
+                obj.style.opacity = (begin + speed) / 100;
+                obj.style.filter = 'alpha(opacity='+ (begin + speed) +')'
+            }else if('zIndex' == k){ // 层级
+                obj.style[k] = json[k];
+            }else if('scrollTop' == k){ // 头部滚动
+                obj.scrollTop = begin + speed;
+            }else { // 正常情况
+                obj.style[k] = begin + speed + 'px';
+            }
 
-
+            // 2.2.3 清除定时器
+            if(target != begin){
+                //只要目标值不等于起始值,一定不能清除定时器
+                flag = false;
+            }
         }
+
+        if(flag){
+            clearInterval(obj.timer);
+            // 回调函数一定是在定时器清除之后
+            if(fn){
+                fn();
+            }
+        }
+    }, 20);
+}
+
+function getStyleAttr(obj, attr) {
+    if(obj.currentStyle){// IE 和 opera
+        return obj.currentStyle[attr];
+    }else {
+        return window.getComputedStyle(obj, null)[attr];
+    }
+}
+
     </script>
 </body>
 </html>
