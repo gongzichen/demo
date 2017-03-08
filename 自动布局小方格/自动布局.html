@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>自动布局</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            bottom: 0;
+        }
+        .box{
+            width:  380px;
+            height: 540px;
+            border: 1px solid #000;
+            margin: 50px auto;
+            position: relative;
+        }
+        .box .grid{
+            position: absolute;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="box"></div>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script>
+        $(function(){
+            var $box = $(".box");
+            var $img ;
+            // 6*6 36格子
+            var dataIndex = [
+                {x:0,y:0,w:2,h:2},
+                {x:2,y:0,w:2,h:2},
+                {x:4,y:0,w:2,h:2},
+                {x:0,y:2,w:3,h:2},
+                {x:3,y:2,w:3,h:2},
+                {x:0,y:4,w:2,h:2},
+                {x:2,y:4,w:4,h:2}
+            ];
+
+//            var images = [
+//                {src:'images/01.jpg'},
+//                {src:'images/02.jpg'},
+//                {src:'images/03.jpg'},
+//                {src:'images/04.jpg'},
+//                {src:'images/05.jpg'},
+//                {src:'images/06.jpg'},
+//                {src:'images/07.jpg'},
+//                {src:'images/08.jpg'},
+//                {src:'images/09.jpg'}
+//            ];
+            //数组
+            var colorArray = ['#EA7DAC', '#F4CD60', '#A2C15E',
+                '#62B7A4', '#93CAED', '#49A8D7',
+                '#1E80C9', '#AF96C5', '#EA7DAC'];
+
+            var marginWH = 10;
+
+            var colW = ($box.width() -  marginWH*7)/6;
+            var colH = ($box.height() - marginWH*7)/6;
+
+            for(var i=0;i<dataIndex.length;i++){
+                var obj = dataIndex[i];
+                //创建小格子
+                var grid = $('<div class="grid">' + '</div>');
+
+                if(i==4){
+                     $img = $('<img src="images/04.jpg">');
+                    $img.appendTo(grid);
+                }
+                grid.css({
+                    'backgroundColor':colorArray[i],
+                    'width': colW * obj.w + (obj.w - 1) * marginWH,
+                    'height':colH * obj.h + (obj.h - 1) * marginWH
+                });
+
+                grid.offset({
+                    left:obj.x * colW + (obj.x + 1 ) * marginWH,
+                    top:obj.y * colH + (obj.y + 1) * marginWH
+                });
+                grid.appendTo($box);
+            }
+            var $newImage;
+            //绘制阴影
+           $img.draggable({
+               start:function(){
+                   // 包装对象
+                   var $parent = $('.box');
+                    $newImage = $('<img class="newImage">').appendTo($parent);
+                   $newImage.attr('src',$img.attr('src'));
+                   var zIndex = 100;
+                   $img.css('z-index',zIndex);
+                   $newImage.css({
+                       'opacity':0.3,
+                       'position':'absolute',
+                       'z-index':zIndex-1,
+                       'left': parseFloat($img.css('left')) + parseFloat($img.parent().css('left')),
+                       'top': parseFloat($img.css('top')) + parseFloat($img.parent().css('top'))
+                   });
+
+               },
+               drag:function(){
+                   $newImage.css('left', parseFloat($img.css('left')) + parseFloat($img.parent().css('left'))); // 使用获取css方法left
+                   $newImage.css('top', parseFloat($img.css('top')) + parseFloat($img.parent().css('top')));
+               },
+               stop:function(){
+                   $('.box .newImage').remove();
+               }
+           })
+
+        })
+    </script>
+</body>
+</html>
