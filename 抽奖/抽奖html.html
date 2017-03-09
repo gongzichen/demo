@@ -48,6 +48,7 @@
     </style>
     <script src="js/jquery-3.1.1.js"></script>
     <script>
+        //奖品
         $(function () {
             var imgArray = [
                 {src:'images/luck/01.jpg',title:'iPhone手机'},
@@ -58,7 +59,7 @@
                 {src:'images/luck/06.jpg',title:'MacBook'},
                 {src:'images/luck/07.jpg',title:'布娃娃'},
                 {src:'images/luck/08.jpg',title:'机械键盘'},
-                {src:'images/luck/09.jpg',title:'洗衣机'},
+                {src:'images/luck/09.jpg',title:'洗衣机'}
             ];
 
             var newLi = null, newImg = null;
@@ -71,19 +72,19 @@
                 var num = parseInt(Math.random()*50) || 9;
 
                 if($(this).text()=='点击抽奖') {
-                  timer = setInterval(autoPlay, 100);
+                    timer = setInterval(autoPlay, 100);
                     function autoPlay(){
-
                         if (num == 0) {
                             clearInterval(timer);
-                            $('#btn').text('再来一次')
+                            $('#btn').text('再来一次');
                             var test=( $('li').eq(loop-1).children('img').attr('alt'));
                             $('li').eq(loop-1).children('img').fadeOut(1000).fadeIn(1000);
                             loop = 0;
                             if(test != '感谢参与'){
                                 alert('恭喜获得'+test)
+                            }else{
+                                alert('再来一发');
                             }
-
                             return;
                         }
                         if (loop > 8) {
@@ -95,14 +96,14 @@
                     }
 
                 } else if ($(this).text() == '再来一次'){
-               //   在来一次  刷新数据 重新排列
+                    //   在来一次  刷新数据 重新排列
                     // 删除之前的数据
-                    $('#btn').text('点击抽奖')
-                         $("ul").empty();
-                        var newImagArray = shuffle(imgArray);
-                        creationData(newImagArray);
+                    $('#btn').text('点击抽奖');
+                    $("ul").empty();
+                    var newImagArray = shuffle(imgArray);
+                    creationData(newImagArray);
                 }
-            })
+            });
 
 
 
@@ -110,15 +111,16 @@
             function creationData(Array) {
                 $.each(Array, function (index, value) {
                     newLi = $('<li></li>');
-                    newImg = $('<img></img');
+                    newImg = $('<img>');
                     $('ul').append(newLi);
                     newLi.append(newImg);
                     newImg.attr({
                         'src': imgArray[index].src,
                         'alt': imgArray[index].title
                     })
-                })
+                });
             }
+
             // 随机排列数组
             function shuffle(input){
                 for(var i = input.length-1;i>=0;i--)
