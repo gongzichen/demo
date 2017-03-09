@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<canvas id="canvas" width="900" height="600" style="border: 1px solid #000;"></canvas>
+<script src="wite.js"></script>
+<script>
+
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+        function clock() {
+            // 时间
+            var date = new Date();
+            var second = date.getSeconds();
+            var minutes = date.getMinutes();
+            var hours = date.getHours();
+            var secondDeg = second * 6 -180;
+            var minutesDeg = minutes * 6 -180;    //
+            var hoursDeg = hours % 12 * 30  -180; //
+            console.log('s:'+secondDeg,'m:'+ minutesDeg, 'h:'+ hoursDeg);
+
+            //  初始值
+            var canvas = document.getElementById('canvas');
+            var ctx = canvas.getContext('2d');
+            var x = canvas.width * 0.5;
+            var y = canvas.height * 0.5;
+
+            /*---------$画圆-----------*/
+            var round = new Round({
+                x0: x, y0: y, color: 'pink', r: 200, w: 8
+            });
+            round.drawRound(ctx);
+
+            /*---------画刻度--------*/
+            var hourDeg = new Wire({
+                color: 'black', w: 8, x0: x, y0: y, deg: 0, mT: 150, lT: 170
+            });
+            var secDeg = new Wire({
+                color: 'black', w: 5, x0: x, y0: y, deg: 0, mT: 160, lT: 170
+            });
+            for (var j = 0; j < 12; j++) {
+                hourDeg.update( 30 * j);
+                hourDeg.draw(ctx);
+
+            }
+
+            for (var i = 0; i < 60; i++) {
+                secDeg.update(6 * i);
+                secDeg.draw(ctx);
+            }
+            /*---------画指针-------*/
+            var min = new Wire({
+                color: 'black', w: 5, x0: x, y0: y, deg: minutesDeg, mT: -10, lT: 145
+            });
+            min.draw(ctx);
+
+            var hour = new Wire({
+                color: 'black', w: 10, x0: x, y0: y, deg: hoursDeg, mT: -10, lT: 120
+            });
+            hour.draw(ctx);
+
+            var sec = new Wire({
+                color: 'red', w: 3, x0: x, y0: y, deg: secondDeg, mT: -10, lT: 160
+            });
+            sec.draw(ctx);
+        }
+
+    // 开始走动
+    setInterval(function(){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        clock();
+    },1000);
+
+
+</script>
+</body>
+</html>
