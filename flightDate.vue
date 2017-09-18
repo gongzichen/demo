@@ -98,8 +98,6 @@ export default {
   props: ['aroud', 'bfDate'],
   data () {
     return {
-      aroud: this.aroud,
-      bfDate: this.bfDate,
       depTime: '',
       arrTime: '',
       dateArr: [],
